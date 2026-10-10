@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 🎓 Student Performance Dashboard + Data Explorer
 
 One project, two parts:
@@ -92,3 +93,6 @@ High >= 30, Medium 15-30, Low < 15. Pass means at least 40 in every subject. Thi
 - `No module named 'cleaning'` / `'eda'`: all `.py` files must be in the same folder you run commands from.
 - `API error 404 Not Found`: the server on that address is not this project's `api.py`. Open `/docs` in the browser to check, and make sure nothing else uses port 8000.
 - Excel upload fails: run `python -m pip install openpyxl`.
+=======
+# student-performance-dashboard
+>>>>>>> d7fe59666df2bff72004f470b588f7c3a72dd157
