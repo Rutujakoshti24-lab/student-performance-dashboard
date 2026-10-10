@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 # 🎓 Student Performance Dashboard + Data Explorer
+live project link:  https://student-performance-dashboard-kvr6fncl5mka5z5fc9epe9.streamlit.app/
 
 One project, two parts:
 
