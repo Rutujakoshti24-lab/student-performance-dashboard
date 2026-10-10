@@ -1,0 +1,52 @@
+"""Generate a sample dataset: students_raw.csv (messy) and students_clean.csv (cleaned).
+
+Run:  python generate_data.py
+Replace students_raw.csv with your own data (same columns) and re-run to clean it.
+"""
+from pathlib import Path
+
+import numpy as np
+import pandas as pd
+
+from cleaning import SUBJECTS, clean_dataframe
+
+BASE = Path(__file__).parent
+RAW = BASE / "students_raw.csv"
+CLEAN = BASE / "students_clean.csv"
+
+
+def make_raw(n: int = 60, seed: int = 42) -> pd.DataFrame:
+    rng = np.random.default_rng(seed)
+    first = ["Aarav", "Diya", "Riya", "Kabir", "Ananya", "Vivaan", "Isha", "Rohan",
+             "Meera", "Arjun", "Sneha", "Kunal", "Pooja", "Nikhil", "Priya"]
+    last = ["Patil", "Sharma", "Deshmukh", "Joshi", "Kulkarni", "More", "Pawar", "Shinde"]
+    rows = []
+    for i in range(1, n + 1):
+        ability = rng.normal(62, 16)  # each student's general level
+        row = {
+            "student_id": i,
+            "name": f"{rng.choice(first)} {rng.choice(last)}",
+            "student_class": rng.choice(["10A", "10B", "10C"]),
+            "attendance_pct": np.clip(rng.normal(80 + (ability - 62) / 3, 10), 30, 100),
+        }
+        for s in SUBJECTS:
+            row[s] = np.clip(rng.normal(ability, 10), 5, 100)
+        rows.append(row)
+    df = pd.DataFrame(rows).round(1)
+
+    # Inject typical dirty data so the cleaning step has something to do
+    df.loc[3, "name"] = "  " + str(df.loc[3, "name"]).lower() + " "
+    df.loc[7, "Math"] = np.nan
+    df.loc[12, "attendance_pct"] = np.nan
+    df.loc[15, "Science"] = 135
+    df = pd.concat([df, df.iloc[[5]]], ignore_index=True)  # duplicate row
+    return df
+
+
+if __name__ == "__main__":
+    raw = make_raw()
+    raw.to_csv(RAW, index=False)
+    clean = clean_dataframe(raw)
+    clean.to_csv(CLEAN, index=False)
+    print(f"Raw rows: {len(raw)} -> clean rows: {len(clean)}")
+    print(f"Saved {RAW.name} and {CLEAN.name}")
